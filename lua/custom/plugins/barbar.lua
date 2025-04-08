@@ -11,7 +11,7 @@ return {'romgrk/barbar.nvim',
       -- …etc.
     },
     keys = {
-        { "<leader>bb", "<cmd>BufferLast<CR>", desc = "LastOpenBuffer" },
+        --{ "<leader>bb", "<cmd>BufferLast<CR>", desc = "LastOpenBuffer" },
         { "A-h", "<Cmd>BufferMovePrevious<CR>", desc = "BufferPrevious" },
         { "A-l", "<Cmd>BufferMoveNext<CR>>", desc = "BufferNext" },
         { "<leader>1", "cmd>BufferGoto 1<CR>", desc = "Buffer 1" },
