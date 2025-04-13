@@ -170,6 +170,7 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
 vim.keymap.set('n', '<leader>bb', '<cmd>b#<CR>')
 vim.keymap.set('n', '<leader>qq', '<cmd>qa<CR>')
+vim.keymap.set('n', '¤', '$')
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
