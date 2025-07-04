@@ -90,6 +90,11 @@ P.S. You can delete this when you're done too. It's your config now! :)
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
+-- vim.keymap.set({ "n", "i", "c", "o", "v", "t", "l" }, "æ", "]", { remap = true })
+-- vim.keymap.set({ "n", "i", "c", "o", "v", "t", "l" }, "ø", "[", { remap = true })
+-- vim.keymap.set({ "n", "i", "c", "o", "v", "t", "l" }, "Æ", "}", { remap = true })
+-- vim.keymap.set({ "n", "i", "c", "o", "v", "t", "l" }, "Ø", "{", { remap = true })
+
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
 
@@ -167,11 +172,22 @@ vim.opt.confirm = true
 
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
-vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
+-- vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 
-vim.keymap.set("n", "<leader>bb", "<cmd>b#<CR>")
+vim.api.nvim_create_autocmd("CursorMoved", {
+    group = vim.api.nvim_create_augroup("auto-hlsearch", { clear = true }),
+    callback = function()
+        if vim.v.hlsearch == 1 and vim.fn.searchcount().exact_match == 0 then
+            vim.schedule(function()
+                vim.cmd.nohlsearch()
+            end)
+        end
+    end,
+})
+
+vim.keymap.set("n", "<bs>", "<cmd>b#<CR>")
 vim.keymap.set("n", "<leader>qq", "<cmd>qa<CR>")
-vim.keymap.set("n", "¤", "$")
+vim.keymap.set({ "n", "v" }, "¤", "$")
 vim.keymap.set("n", "-", "<CMD>Oil --float<CR>", { desc = "Open parent directory" })
 -- Diagnostic keymaps
 vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
@@ -198,6 +214,21 @@ vim.keymap.set("n", "<C-h>", "<C-w><C-h>", { desc = "Move focus to the left wind
 vim.keymap.set("n", "<C-l>", "<C-w><C-l>", { desc = "Move focus to the right window" })
 vim.keymap.set("n", "<C-j>", "<C-w><C-j>", { desc = "Move focus to the lower window" })
 vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
+
+vim.keymap.set({ "n", "v" }, "H", "^")
+vim.keymap.set({ "n", "v" }, "L", "$")
+
+vim.keymap.set("n", "<A-h>", "<Cmd>BufferPrevious<CR>")
+vim.keymap.set("n", "<A-l>", "<Cmd>BufferNext<CR>>")
+vim.keymap.set("n", "<leader>1", "<cmd>BufferGoto 1<CR>")
+vim.keymap.set("n", "<leader>2", "<cmd>BufferGoto 2<CR>")
+vim.keymap.set("n", "<leader>3", "<cmd>BufferGoto 3<CR>")
+vim.keymap.set("n", "<leader>4", "<cmd>BufferGoto 4<CR>")
+vim.keymap.set("n", "<leader>5", "<cmd>BufferGoto 5<CR>")
+vim.keymap.set("n", "<leader>6", "<cmd>BufferGoto 6<CR>")
+vim.keymap.set("n", "<leader>7", "<cmd>BufferGoto 7<CR>")
+vim.keymap.set("n", "<leader>8", "<cmd>BufferGoto 8<CR>")
+vim.keymap.set("n", "<leader>9", "<cmd>BufferGoto 9<CR>")
 
 -- NOTE: Some terminals have coliding keymaps or are not able to send distinct keycodes
 -- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
@@ -484,8 +515,9 @@ require("lazy").setup({
             -- Automatically install LSPs and related tools to stdpath for Neovim
             -- Mason must be loaded before its dependents so we need to set it up here.
             -- NOTE: `opts = {}` is the same as calling `require('mason').setup({})`
-            { "williamboman/mason.nvim", opts = {} },
-            "williamboman/mason-lspconfig.nvim",
+            -- # NOTE: TEMPORARY TIE MASON TO 1.0.0
+            { "williamboman/mason.nvim", opts = {}, version = "^1.0.0" },
+            { "williamboman/mason-lspconfig.nvim", version = "^1.0.0" },
             "WhoIsSethDaniel/mason-tool-installer.nvim",
 
             -- Useful status updates for LSP.
@@ -925,13 +957,13 @@ require("lazy").setup({
                 overrides = function(colors) -- add/modify highlights
                     return {}
                 end,
-                theme = "dragon", -- Load "wave" theme
+                theme = "wave", -- Load "wave" theme
                 background = { -- map the value of 'background' option to a theme
-                    dark = "dragon", -- try "dragon" !
+                    dark = "wave", -- try "dragon" !
                     light = "lotus",
                 },
             }
-            vim.cmd.colorscheme "kanagawa-dragon"
+            vim.cmd.colorscheme "kanagawa-wave"
         end,
     },
 
